@@ -8,7 +8,7 @@
 </p>
 
 <p align="center">
-  <i>A solução ideal para gerenciar seus clientes.</i>
+  <i>API para gerenciar clientes.</i>
 </p>
 
 ---
