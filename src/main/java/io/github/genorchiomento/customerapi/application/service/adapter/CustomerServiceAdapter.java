@@ -6,13 +6,13 @@ import io.github.genorchiomento.customerapi.domain.model.Customer;
 public class CustomerServiceAdapter {
 
     public static CustomerResponse cast(Customer customer) {
-        CustomerResponse response = new CustomerResponse();
-        response.setId(customer.getId());
-        response.setCpf(customer.getCpf());
-        response.setName(customer.getName());
-        response.setBirthDate(customer.getBirthDate());
-        response.setPhone(customer.getPhone());
-        response.setAddress(customer.getAddress());
-        return response;
+        return new CustomerResponse(
+                customer.id(),
+                customer.cpf(),
+                customer.name(),
+                customer.birthDate(),
+                customer.phone(),
+                customer.address()
+        );
     }
 }

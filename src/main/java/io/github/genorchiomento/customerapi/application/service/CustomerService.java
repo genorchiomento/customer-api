@@ -22,16 +22,18 @@ public class CustomerService {
     }
 
     public CustomerResponse createCustomer(CustomerRequest request) {
-        if (customerRepository.existsByCpf(request.getCpf())) {
-            throw new CustomerAlreadyExistsException("Customer already exists with CPF: " + request.getCpf());
+        if (customerRepository.existsByCpf(request.cpf())) {
+            throw new CustomerAlreadyExistsException("Customer already exists with CPF: " + request.cpf());
         }
 
-        Customer customer = new Customer();
-        customer.setCpf(request.getCpf());
-        customer.setName(request.getName());
-        customer.setBirthDate(request.getBirthDate());
-        customer.setPhone(request.getPhone());
-        customer.setAddress(request.getAddress());
+        Customer customer = new Customer(
+                null,
+                request.cpf(),
+                request.name(),
+                request.birthDate(),
+                request.phone(),
+                request.address()
+        );
 
         Customer savedCustomer = customerRepository.save(customer);
         return CustomerServiceAdapter.cast(savedCustomer);
@@ -50,15 +52,20 @@ public class CustomerService {
     }
 
     public CustomerResponse updateCustomer(String cpf, CustomerRequest request) {
-        Customer customer = customerRepository.findByCpf(cpf)
+        Customer existingCustomer = customerRepository.findByCpf(cpf)
                 .orElseThrow(() -> new CustomerNotFoundException("Customer not found with CPF: " + cpf));
 
-        customer.setName(request.getName());
-        customer.setBirthDate(request.getBirthDate());
-        customer.setPhone(request.getPhone());
-        customer.setAddress(request.getAddress());
+        Customer updatedCustomer = new Customer(
+                existingCustomer.id(),
+                existingCustomer.cpf(),
+                request.name(),
+                request.birthDate(),
+                request.phone(),
+                request.address()
+        );
 
-        Customer updatedCustomer = customerRepository.save(customer);
+        updatedCustomer = customerRepository.save(updatedCustomer);
+
         return CustomerServiceAdapter.cast(updatedCustomer);
     }
 
